@@ -57,19 +57,21 @@ ENV LOGSIZE		""
 
 RUN apt-get -y update
 RUN apt-get -y upgrade
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+RUN apt-get install -y -q dialog apt-utils git
 RUN apt-get -y install python3-tk python3-pip
 RUN pip3 install tzlocal pysqlite3 sqlite-web
 
 
-RUN mkdir /opt/py-kms
+
+
+RUN cd /opt && git clone https://github.com/xntric78/py-kms.git
 
 # EN: Startup script
 COPY start.sh /opt/py-kms/start.sh
 
-RUN git clone https://github.com/xntric78/py-kms.git /opt/py-kms
-
 # EN: Change permissions
-RUN chmod a+x /opt/py-kms/start.sh && \
+RUN chmod a+x /opt/py-kms/start.sh
 
 # Set Workdir
 WORKDIR /opt/py-kms
